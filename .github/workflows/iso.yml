@@ -49,21 +49,24 @@ jobs:
             cosign sign-blob -y --key env://SIGNING_KEY "$iso" --output-signature "${iso}.sig"
           done
 
-      - name: Upload to Cloudflare R2
+      - name: Upload to Internet Archive
         env:
-          RCLONE_CONFIG_R2_TYPE: s3
-          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
-          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
-          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
-          RCLONE_CONFIG_R2_REGION: auto
-          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
-          R2_PUBLIC_BASE: ${{ secrets.R2_PUBLIC_BASE }}
+          RCLONE_CONFIG_IA_TYPE: s3
+          RCLONE_CONFIG_IA_PROVIDER: Other
+          RCLONE_CONFIG_IA_ENDPOINT: https://s3.us.archive.org
+          RCLONE_CONFIG_IA_REGION: us-east-1
+          RCLONE_CONFIG_IA_ACCESS_KEY_ID: ${{ secrets.IA_ACCESS_KEY }}
+          RCLONE_CONFIG_IA_SECRET_ACCESS_KEY: ${{ secrets.IA_SECRET_KEY }}
         run: |
           sudo apt-get update && sudo apt-get install -y rclone
           cd output/bootiso
-          rclone copy . R2:blueshift/ --progress
+          rclone copy . IA:blueshift-linux-isos/ \
+            --header-upload "x-archive-meta-mediatype:software" \
+            --header-upload "x-archive-meta-title:BlueShift Linux ISO" \
+            --header-upload "x-archive-meta-description:Bootable installer ISO for BlueShift Linux, a Fedora Atomic gaming distribution. Source: https://github.com/nothing12-glitch/blueshift" \
+            --header-upload "x-archive-meta-subject:linux;gaming;fedora;bluebuild"
           {
             echo "## BlueShift ISO ready"
             echo ""
-            for f in *; do echo "- ${R2_PUBLIC_BASE%/}/$f"; done
+            for f in *; do echo "- https://archive.org/download/blueshift-linux-isos/$f"; done
           } >> "$GITHUB_STEP_SUMMARY"
