@@ -7,7 +7,7 @@
 
 | Компонент | Джерело |
 |---|---|
-| Fedora Atomic + KDE Plasma | базовий образ `ghcr.io/ublue-os/kinoite:stable` |
+| Fedora Atomic + KDE Plasma | базовий образ `ghcr.io/ublue-os/kinoite-main:latest` |
 | gamemode, MangoHud, gamescope, steam-devices | RPM з репозиторіїв Fedora (модуль `dnf`) |
 | Steam, Heroic (Epic/GOG), Lutris | системні Flatpak (модуль `default-flatpaks`) |
 | Plymouth-тема «BlueShift» | `files/system/usr/share/plymouth/themes/blueshift/` |
@@ -46,7 +46,7 @@ blueshift/
 На будь-якій Fedora Atomic (Silverblue/Kinoite) або іншому bootc-дистрибутиві:
 
 ```bash
-sudo bootc switch ghcr.io/<твій-нік>/blueshift:stable
+sudo bootc switch ghcr.io/<твій-нік>/blueshift:latest
 systemctl reboot
 ```
 

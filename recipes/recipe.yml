@@ -4,8 +4,8 @@
 name: blueshift
 description: BlueShift Linux — Fedora Atomic gaming distribution
 
-base-image: ghcr.io/ublue-os/kinoite
-image-version: stable
+base-image: ghcr.io/ublue-os/kinoite-main
+image-version: latest
 
 modules:
   # Branding: Plymouth theme, MOTD, sysctl tweaks
