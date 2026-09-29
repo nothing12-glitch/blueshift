@@ -1,39 +1,38 @@
-name: Build BlueShift Linux
-
+name: bluebuild
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**.md"
   pull_request:
   workflow_dispatch:
   schedule:
     # щопонеділка о 06:00 UTC — щоб образ не "старів" відносно Fedora
     - cron: "0 6 * * 1"
 
-env:
-  IMAGE_NAME: blueshift
-  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
-
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  bluebuild:
+    name: Build Custom Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
       packages: write
       id-token: write
-      pull-requests: write
+    strategy:
+      fail-fast: false
+      matrix:
+        recipe:
+          - recipe.yml
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build, push and create installer
-        uses: bluebuild/github-action@v0
+      - name: Build Custom Image
+        uses: blue-build/github-action@v1.13
         with:
-          build: true
-          push: ${{ github.event_name != 'pull_request' }}
-          installer: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
-          pr-comment: ${{ github.event_name == 'pull_request' }}
-          registry-token: ${{ secrets.GITHUB_TOKEN }}
+          recipe: ${{ matrix.recipe }}
+          cosign_private_key: ${{ secrets.SIGNING_SECRET }}
+          registry_token: ${{ github.token }}
+          pr_event_number: ${{ github.event.number }}
+          maximize_build_space: true

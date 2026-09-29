@@ -1,0 +1,42 @@
+---
+# yaml-language-server: $schema=https://schema.blue-build.org/recipe-v1.json
+# image will be published to ghcr.io/nothing12-glitch/blueshift
+name: blueshift
+description: BlueShift Linux — Fedora Atomic gaming distribution
+
+base-image: ghcr.io/ublue-os/kinoite
+image-version: stable
+
+modules:
+  # Branding: Plymouth theme, MOTD, sysctl tweaks
+  - type: files
+    files:
+      - source: system
+        destination: /
+
+  # Rename the distro in os-release
+  - type: script
+    scripts:
+      - rename.sh
+
+  # Gaming tools from Fedora repos
+  - type: dnf
+    install:
+      packages:
+        - gamemode        # optimization daemon (CPU governor, priority)
+        - mangohud        # FPS/temperature overlay
+        - gamescope       # SteamOS-style nested game compositor
+        - steam-devices   # udev rules for game controllers
+
+  # Gaming launchers as system Flatpaks
+  - type: default-flatpaks
+    configurations:
+      - notify: true
+        scope: system
+        install:
+          - com.valvesoftware.Steam
+          - com.heroicgameslauncher.hgl
+          - net.lutris.Lutris
+
+  # Sets up policy & signing files for signed images
+  - type: signing
