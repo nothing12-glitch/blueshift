@@ -1,0 +1,69 @@
+name: Build ISO
+
+on:
+  workflow_dispatch:
+  schedule:
+    # щопонеділка о 09:00 UTC — після щотижневої збірки образу
+    - cron: "0 9 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  iso:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Free Disk Space
+        uses: jlumbroso/free-disk-space@ceedf095f4ec1a097402bc6bd80831f2e1a6fde6
+        with:
+          tool-cache: true
+
+      - name: Setup Cosign
+        uses: sigstore/cosign-installer@6f9f17788090df1f26f669e9d70d6ae9567deba6
+
+      - name: Build Anaconda ISO
+        run: |
+          mkdir -p output auth
+          printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
+            "$(printf '%s' '${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}' | base64 -w0)" > auth/auth.json
+          sudo podman run --rm --privileged \
+            -v "$PWD/output":/output \
+            -v "$PWD/auth/auth.json":/root/.config/containers/auth.json:ro \
+            quay.io/centos-bootc/bootc-image-builder:latest \
+            --type anaconda-iso \
+            "ghcr.io/${{ github.repository_owner }}/blueshift:latest"
+
+      - name: Rename, checksum and sign
+        env:
+          SIGNING_KEY: ${{ secrets.SIGNING_SECRET }}
+        run: |
+          cd output/bootiso
+          DATE=$(date -u +%Y%m%d)
+          for iso in *.iso; do mv "$iso" "blueshift-${DATE}-${iso}"; done
+          sha256sum *.iso | tee "blueshift-${DATE}-CHECKSUM"
+          for iso in *.iso; do
+            cosign sign-blob -y --key env://SIGNING_KEY "$iso" --output-signature "${iso}.sig"
+          done
+
+      - name: Upload to Cloudflare R2
+        env:
+          RCLONE_CONFIG_R2_TYPE: s3
+          RCLONE_CONFIG_R2_PROVIDER: Cloudflare
+          RCLONE_CONFIG_R2_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          RCLONE_CONFIG_R2_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          RCLONE_CONFIG_R2_REGION: auto
+          RCLONE_CONFIG_R2_ENDPOINT: ${{ secrets.R2_ENDPOINT }}
+          R2_PUBLIC_BASE: ${{ secrets.R2_PUBLIC_BASE }}
+        run: |
+          sudo apt-get update && sudo apt-get install -y rclone
+          cd output/bootiso
+          rclone copy . R2:blueshift/ --progress
+          {
+            echo "## BlueShift ISO ready"
+            echo ""
+            for f in *; do echo "- ${R2_PUBLIC_BASE%/}/$f"; done
+          } >> "$GITHUB_STEP_SUMMARY"
