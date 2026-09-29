@@ -1,0 +1,39 @@
+name: Build BlueShift Linux
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+  schedule:
+    # щопонеділка о 06:00 UTC — щоб образ не "старів" відносно Fedora
+    - cron: "0 6 * * 1"
+
+env:
+  IMAGE_NAME: blueshift
+  IMAGE_REGISTRY: ghcr.io/${{ github.repository_owner }}
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      id-token: write
+      pull-requests: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build, push and create installer
+        uses: bluebuild/github-action@v0
+        with:
+          build: true
+          push: ${{ github.event_name != 'pull_request' }}
+          installer: ${{ github.event_name == 'push' || github.event_name == 'workflow_dispatch' || github.event_name == 'schedule' }}
+          pr-comment: ${{ github.event_name == 'pull_request' }}
+          registry-token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,8 @@
+[Plymouth Theme]
+Name=BlueShift
+Description=BlueShift Linux boot theme
+ModuleName=script
+
+[script]
+ImageDir=/usr/share/plymouth/themes/blueshift
+ScriptFile=/usr/share/plymouth/themes/blueshift/blueshift.script

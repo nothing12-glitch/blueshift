@@ -1,0 +1,59 @@
+# BlueShift Linux Plymouth theme
+# Темно-синій градієнт, логотип, пульсуючі точки-індикатори
+
+window.SetBackgroundTopColor(0.01, 0.03, 0.09);
+window.SetBackgroundBottomColor(0.03, 0.14, 0.36);
+
+screen_width = Window.GetWidth();
+screen_height = Window.GetHeight();
+
+# Основна назва
+title = PangoText.New();
+title.SetFont("Sans Bold 32");
+title.SetText("BlueShift");
+title.SetForegroundColor(0.55, 0.80, 1.00);
+title_image = title.GetImage();
+title_sprite = Sprite(title_image);
+title_sprite.SetX((screen_width - title_image.GetWidth()) / 2);
+title_sprite.SetY(screen_height / 2 - 60);
+
+# Підзаголовок
+subtitle = PangoText.New();
+subtitle.SetFont("Sans 14");
+subtitle.SetText("L I N U X   ·   G A M I N G   E D I T I O N");
+subtitle.SetForegroundColor(0.70, 0.78, 0.90);
+subtitle_image = subtitle.GetImage();
+subtitle_sprite = Sprite(subtitle_image);
+subtitle_sprite.SetX((screen_width - subtitle_image.GetWidth()) / 2);
+subtitle_sprite.SetY(screen_height / 2 - 15);
+
+# Пульсуючі точки-індикатори завантаження
+dot_count = 5;
+dot_sprites = [];
+for (i = 0; i < dot_count; i++)
+{
+    dot = PangoText.New();
+    dot.SetFont("Sans Bold 18");
+    dot.SetText(".");
+    dot.SetForegroundColor(0.55, 0.80, 1.00);
+    dot_image = dot.GetImage();
+    dot_sprites[i] = Sprite(dot_image);
+    dot_sprites[i].SetX(screen_width / 2 + (i - 2) * 26);
+    dot_sprites[i].SetY(screen_height / 2 + 30);
+    dot_sprites[i].SetOpacity(0.15);
+}
+
+anim_step = 0;
+fun animate()
+{
+    for (i = 0; i < dot_count; i++)
+    {
+        distance = (anim_step - i + dot_count) % dot_count;
+        if (distance == 0)
+            dot_sprites[i].SetOpacity(1.0);
+        else
+            dot_sprites[i].SetOpacity(0.15 + 0.5 * (dot_count - distance) / dot_count);
+    }
+    anim_step = (anim_step + 1) % dot_count;
+}
+anim_timer = fun(animate, 120);

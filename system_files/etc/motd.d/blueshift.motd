@@ -1,0 +1,17 @@
+\e[1;94m  ____  _                  ___ _     _  __ \e[0m
+\e[1;94m | __ )| |_   _  ___      / __| |___| |_\ \e[0m
+\e[1;94m |  _ \| | | | |/ _ \_____\__ \ / -_)  _|
+\e[1;94m |___/|_|\__,_|\___/_____|___/_\___|___|
+\e[0m
+\e[36m  BlueShift Linux — Gaming Edition (Fedora Atomic)\e[0m
+
+  Швидкий старт:
+    steam              — запуск Steam (або з меню застосунків)
+    heroic             — Heroic Games Launcher (Epic/GOG)
+    lutris             — Lutris
+    ujust              — меню всіх системних команд
+    gamescope          — ігровий композитор (SteamOS-style)
+    mangohud <команда> — FPS/статистика поверх гри
+
+  Оновлення системи:
+    sudo rpm-ostree upgrade && systemctl reboot
