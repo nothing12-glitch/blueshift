@@ -45,6 +45,7 @@ jobs:
         env:
           SIGNING_KEY: ${{ secrets.SIGNING_SECRET }}
         run: |
+          sudo chown -R "$(id -u):$(id -g)" output
           cd output/bootiso
           DATE=$(date -u +%Y%m%d)
           for iso in *.iso; do mv "$iso" "blueshift-${DATE}-${iso}"; done
