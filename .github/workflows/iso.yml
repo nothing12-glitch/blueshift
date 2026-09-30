@@ -30,7 +30,8 @@ jobs:
           mkdir -p output auth
           printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
             "$(printf '%s' '${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}' | base64 -w0)" > auth/auth.json
-          sudo podman run --rm --privileged \
+          sudo podman run --rm --privileged --pull=newer \
+            -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v "$PWD/output":/output \
             -v "$PWD/auth/auth.json":/root/.config/containers/auth.json:ro \
             quay.io/centos-bootc/bootc-image-builder:latest \
