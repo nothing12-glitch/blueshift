@@ -30,6 +30,8 @@ jobs:
           mkdir -p output auth
           printf '{"auths":{"ghcr.io":{"auth":"%s"}}}' \
             "$(printf '%s' '${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}' | base64 -w0)" > auth/auth.json
+          sudo podman pull --authfile auth/auth.json \
+            "ghcr.io/${{ github.repository_owner }}/blueshift:latest"
           sudo podman run --rm --privileged --pull=newer \
             -v /var/lib/containers/storage:/var/lib/containers/storage \
             -v "$PWD/output":/output \
