@@ -51,7 +51,7 @@ jobs:
           for iso in *.iso; do mv "$iso" "blueshift-${DATE}-${iso}"; done
           sha256sum *.iso | tee "blueshift-${DATE}-CHECKSUM"
           for iso in *.iso; do
-            cosign sign-blob -y --key env://SIGNING_KEY "$iso" --output-signature "${iso}.sig"
+            cosign sign-blob -y --key env://SIGNING_KEY "$iso" --bundle "${iso}.bundle"
           done
 
       - name: Upload to Internet Archive
