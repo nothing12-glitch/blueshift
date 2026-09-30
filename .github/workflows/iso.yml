@@ -38,6 +38,7 @@ jobs:
             -v "$PWD/auth/auth.json":/root/.config/containers/auth.json:ro \
             quay.io/centos-bootc/bootc-image-builder:latest \
             --type anaconda-iso \
+            --rootfs xfs \
             "ghcr.io/${{ github.repository_owner }}/blueshift:latest"
 
       - name: Rename, checksum and sign
