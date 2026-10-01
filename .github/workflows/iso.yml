@@ -50,9 +50,7 @@ jobs:
           DATE=$(date -u +%Y%m%d)
           for iso in *.iso; do mv "$iso" "blueshift-${DATE}-${iso}"; done
           sha256sum *.iso | tee "blueshift-${DATE}-CHECKSUM"
-          for iso in *.iso; do
-            cosign sign-blob -y --key env://SIGNING_KEY "$iso" --bundle "${iso}.bundle"
-          done
+          cosign sign-blob -y --key env://SIGNING_KEY "blueshift-${DATE}-CHECKSUM" --bundle "blueshift-${DATE}-CHECKSUM.bundle"
 
       - name: Upload to Internet Archive
         env:
