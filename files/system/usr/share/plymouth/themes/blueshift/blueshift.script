@@ -1,11 +1,19 @@
 # BlueShift Linux Plymouth theme
-# Темно-синій градієнт, логотип, пульсуючі точки-індикатори
+# Площинний фон під колір тла логотипа, логотип по центру, пульсуючі точки
 
-window.SetBackgroundTopColor(0.01, 0.03, 0.09);
-window.SetBackgroundBottomColor(0.03, 0.14, 0.36);
+window.SetBackgroundTopColor(0.0118, 0.0235, 0.0863);
+window.SetBackgroundBottomColor(0.0118, 0.0235, 0.0863);
 
 screen_width = Window.GetWidth();
 screen_height = Window.GetHeight();
+
+# Логотип
+logo_size = 220;
+logo = Image("logo.png");
+logo = logo.Scale(logo_size, logo_size);
+logo_sprite = Sprite(logo);
+logo_sprite.SetX((screen_width - logo_size) / 2);
+logo_sprite.SetY(screen_height / 2 - 175);
 
 # Основна назва
 title = PangoText.New();
@@ -15,7 +23,7 @@ title.SetForegroundColor(0.55, 0.80, 1.00);
 title_image = title.GetImage();
 title_sprite = Sprite(title_image);
 title_sprite.SetX((screen_width - title_image.GetWidth()) / 2);
-title_sprite.SetY(screen_height / 2 - 60);
+title_sprite.SetY(screen_height / 2 + 70);
 
 # Підзаголовок
 subtitle = PangoText.New();
@@ -25,7 +33,7 @@ subtitle.SetForegroundColor(0.70, 0.78, 0.90);
 subtitle_image = subtitle.GetImage();
 subtitle_sprite = Sprite(subtitle_image);
 subtitle_sprite.SetX((screen_width - subtitle_image.GetWidth()) / 2);
-subtitle_sprite.SetY(screen_height / 2 - 15);
+subtitle_sprite.SetY(screen_height / 2 + 112);
 
 # Пульсуючі точки-індикатори завантаження
 dot_count = 5;
@@ -39,7 +47,7 @@ for (i = 0; i < dot_count; i++)
     dot_image = dot.GetImage();
     dot_sprites[i] = Sprite(dot_image);
     dot_sprites[i].SetX(screen_width / 2 + (i - 2) * 26);
-    dot_sprites[i].SetY(screen_height / 2 + 30);
+    dot_sprites[i].SetY(screen_height / 2 + 150);
     dot_sprites[i].SetOpacity(0.15);
 }
 

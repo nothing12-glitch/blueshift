@@ -38,5 +38,10 @@ modules:
           - com.heroicgameslauncher.hgl
           - net.lutris.Lutris
 
+  # NVIDIA proprietary drivers (Intel/AMD mesa+Vulkan already in Fedora base)
+  - type: akmods
+    base: main
+    nvidia-driver: nvidia
+
   # Sets up policy & signing files for signed images
   - type: signing
