@@ -1,0 +1,66 @@
+# BlueShift Portal catalog — screens -> actions
+# script: runs on click; status_script: exit 0 = already installed/enabled
+screens:
+  - title: Gaming
+    actions:
+      - id: retroarch
+        title: RetroArch
+        description: Multi-system emulator frontend (NES, SNES, N64, PSX and more).
+        script: flatpak install --system -y org.libretro.RetroArch
+        status_script: flatpak info --system org.libretro.RetroArch
+      - id: dolphin
+        title: Dolphin
+        description: GameCube and Wii emulator.
+        script: flatpak install --system -y org.DolphinEmu.dolphin-emu
+        status_script: flatpak info --system org.DolphinEmu.dolphin-emu
+      - id: bottles
+        title: Bottles
+        description: Run Windows games and apps in managed prefixes.
+        script: flatpak install --system -y com.usebottles.bottles
+        status_script: flatpak info --system com.usebottles.bottles
+      - id: protonup-qt
+        title: ProtonUp-Qt
+        description: Install and manage GE-Proton compatibility tools for Steam.
+        script: flatpak install --system -y net.davidotek.protonup-qt
+        status_script: flatpak info --system net.davidotek.protonup-qt
+      - id: heroic
+        title: Heroic Games Launcher
+        description: Open-source launcher for GOG, Epic and Amazon games.
+        script: flatpak install --system -y com.heroicgameslauncher.hgl
+        status_script: flatpak info --system com.heroicgameslauncher.hgl
+
+  - title: Applications
+    actions:
+      - id: discord
+        title: Discord
+        description: Voice and text chat for gamers.
+        script: flatpak install --system -y com.discordapp.Discord
+        status_script: flatpak info --system com.discordapp.Discord
+      - id: obs-studio
+        title: OBS Studio
+        description: Recording and live streaming.
+        script: flatpak install --system -y com.obsproject.Studio
+        status_script: flatpak info --system com.obsproject.Studio
+      - id: vlc
+        title: VLC
+        description: Plays almost every video and audio format.
+        script: flatpak install --system -y org.videolan.VLC
+        status_script: flatpak info --system org.videolan.VLC
+      - id: bitwarden
+        title: Bitwarden
+        description: Password manager.
+        script: flatpak install --system -y com.bitwarden.desktop
+        status_script: flatpak info --system com.bitwarden.desktop
+
+  - title: Tweaks
+    actions:
+      - id: mangohud-enable
+        title: Enable MangoHud overlay
+        description: User-level MangoHud config with FPS, frame timing and GPU/CPU stats.
+        script: mkdir -p "$HOME/.config/MangoHud" && printf 'gpu_stats\ncpu_stats\nfps\nframe_timing\n' > "$HOME/.config/MangoHud/MangoHud.conf"
+        status_script: test -f "$HOME/.config/MangoHud/MangoHud.conf"
+      - id: mangohud-disable
+        title: Disable MangoHud overlay
+        description: Removes the user-level MangoHud config.
+        script: rm -f "$HOME/.config/MangoHud/MangoHud.conf"
+        status_script: test ! -f "$HOME/.config/MangoHud/MangoHud.conf"

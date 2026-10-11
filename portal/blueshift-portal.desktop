@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=BlueShift Portal
+Comment=Helps you set up BlueShift
+Exec=/usr/lib/blueshift/portal/yafti_gtk.py /usr/share/yafti/yafti.yml
+Icon=/usr/share/pixmaps/blueshift-portal.png
+Terminal=false
+Type=Application
+Categories=System;Settings;
+Keywords=blueshift;setup;configuration;gaming;
