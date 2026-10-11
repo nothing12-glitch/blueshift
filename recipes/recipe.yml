@@ -42,6 +42,7 @@ modules:
   - type: akmods
     base: main
     nvidia-driver: nvidia
+    install: []
 
   # Sets up policy & signing files for signed images
   - type: signing
