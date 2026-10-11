@@ -22,4 +22,11 @@ jobs:
           echo "access-key length: ${#RCLONE_CONFIG_IA_ACCESS_KEY_ID}"
           echo "secret-key length: ${#RCLONE_CONFIG_IA_SECRET_ACCESS_KEY}"
           rclone lsd IA: || true
+          mkdir -p probe && echo "blueshift upload probe" > probe/_probe.txt
+          rclone copy probe/ IA:blueshift-linux-isos/ \
+            --header-upload "x-archive-meta-mediatype:software" \
+            --header-upload "x-archive-meta-title:BlueShift Linux ISO" \
+            --header-upload "x-archive-meta-description:Bootable installer ISO for BlueShift Linux, a Fedora Atomic gaming distribution. Source: https://github.com/nothing12-glitch/blueshift" \
+            --header-upload "x-archive-meta-subject:linux;gaming;fedora;bluebuild"
+          echo "PROBE_UPLOAD_OK"
           rclone lsl IA:blueshift-linux-isos || true
