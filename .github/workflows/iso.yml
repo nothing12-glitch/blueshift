@@ -63,7 +63,9 @@ jobs:
         run: |
           sudo apt-get update && sudo apt-get install -y rclone
           cd output/bootiso
-          rclone copy . IA:blueshift-linux-isos/ \
+          # --ignore-times: бекенд internetarchive не підтримує mtime, тож rclone
+          # порівнює лише розмір і пропускає однойменні файли однакового розміру
+          rclone copy . IA:blueshift-linux-isos/ --ignore-times \
             --header-upload "x-archive-meta-mediatype:software" \
             --header-upload "x-archive-meta-title:BlueShift Linux ISO" \
             --header-upload "x-archive-meta-description:Bootable installer ISO for BlueShift Linux, a Fedora Atomic gaming distribution. Source: https://github.com/nothing12-glitch/blueshift" \
