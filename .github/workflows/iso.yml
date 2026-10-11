@@ -2,9 +2,10 @@ name: Build ISO
 
 on:
   workflow_dispatch:
-  schedule:
-    # щопонеділка о 09:00 UTC — після щотижневої збірки образу
-    - cron: "0 9 * * 1"
+  # автоматично після успішної збірки образу — не чекаємо ручного запуску
+  workflow_run:
+    workflows: ["bluebuild"]
+    types: [completed]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref || github.run_id }}
@@ -12,6 +13,7 @@ concurrency:
 
 jobs:
   iso:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     permissions:
       contents: read
