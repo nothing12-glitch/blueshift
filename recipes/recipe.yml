@@ -14,11 +14,11 @@ modules:
       - source: system
         destination: /
 
-  # Rename the distro in os-release
+  # Rename the distro in os-release; restore exec bits on our launchers
   - type: script
     scripts:
       - rename.sh
-      - portal-install.sh
+      - portal-perms.sh
 
   # Gaming tools from Fedora repos
   - type: dnf
