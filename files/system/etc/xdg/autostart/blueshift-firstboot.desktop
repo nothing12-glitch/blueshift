@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=BlueShift first-login branding
+Name[uk]=BlueShift брендинг першого входу
+Comment=Applies BlueShift logo, sounds and wallpaper for the user once
+Comment[uk]=Одноразово застосовує логотип, звуки та шпалери BlueShift для користувача
+Exec=/usr/bin/bash /usr/lib/blueshift/firstboot.sh
+X-KDE-autostart-phase=2
+NoDisplay=true

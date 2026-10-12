@@ -18,6 +18,7 @@ modules:
   - type: script
     scripts:
       - rename.sh
+      - portal-install.sh
 
   # Gaming tools from Fedora repos
   - type: dnf
@@ -27,6 +28,9 @@ modules:
         - mangohud        # FPS/temperature overlay
         - gamescope       # SteamOS-style nested game compositor
         - steam-devices   # udev rules for game controllers
+        - gtk4            # runtime for BlueShift Portal (GTK4)
+        - python3-gobject # PyGObject for the portal app
+        - python3-yaml    # YAML catalog parsing
 
   # Gaming launchers as system Flatpaks
   - type: default-flatpaks
@@ -43,6 +47,11 @@ modules:
     base: main
     nvidia-driver: nvidia
     install: []
+
+  # Bake our Plymouth theme into the initramfs (base image's splash otherwise)
+  - type: script
+    scripts:
+      - splash-initramfs.sh
 
   # Sets up policy & signing files for signed images
   - type: signing

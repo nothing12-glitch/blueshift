@@ -1,0 +1,10 @@
+[Sound Theme]
+Name=BlueShift
+Name[uk]=BlueShift
+Comment=BlueShift Linux system sounds
+Comment[uk]=Системні звуки BlueShift Linux
+Inherits=freedesktop
+Directories=stereo
+
+[stereo]
+OutputProfile=stereo
