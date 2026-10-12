@@ -48,5 +48,10 @@ modules:
     nvidia-driver: nvidia
     install: []
 
+  # Bake our Plymouth theme into the initramfs (base image's splash otherwise)
+  - type: script
+    scripts:
+      - splash-initramfs.sh
+
   # Sets up policy & signing files for signed images
   - type: signing

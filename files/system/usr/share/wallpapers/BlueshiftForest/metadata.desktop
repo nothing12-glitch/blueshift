@@ -1,0 +1,15 @@
+[Desktop Entry]
+Name=BlueShift Forest
+Name[uk]=BlueShift Ліс
+X-KDE-PluginInfo-Name=BlueshiftForest
+X-KDE-PluginInfo-Author=BlueShift Linux
+X-KDE-PluginInfo-Email=blueshift-linux@archive.org
+X-KDE-PluginInfo-License=CC-BY-SA-4.0
+X-KDE-PluginInfo-Version=1.0
+X-KDE-PluginInfo-Website=
+X-KDE-PluginInfo-Category=
+X-KDE-PluginInfo-Depends=
+X-KDE-PluginInfo-EnabledByDefault=true
+Type=Service
+MimeType=
+X-KDE-ServiceTypes=Plasma/Wallpaper
